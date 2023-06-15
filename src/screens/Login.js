@@ -6,7 +6,32 @@ import Loading from "../components/LoadingError/Loading";
 import Header from "./../components/Header";
 import { login } from "./../Redux/Actions/userActions";
 
+
 const Login = ({ location, history }) => {
+  // const [password, setPassword] = useState("Abc.@678");
+  const [errorMessage, setErrorMessage] = useState("");
+
+  function handlePassword(event) {
+    let new_pass = event.target.value;
+    setPassword(new_pass);
+ 
+    // regular expressions to validate password
+    var lowerCase = /[a-z]/g;
+    var upperCase = /[A-Z]/g;
+    var numbers = /[0-9]/g;
+    if (!new_pass.match(lowerCase)) {
+       setErrorMessage("Password should contains lowercase letters!");
+    } else if (!new_pass.match(upperCase)) {
+       setErrorMessage("Password should contain uppercase letters!");
+    } else if (!new_pass.match(numbers)) {
+       setErrorMessage("Password should contains numbers also!");
+    } else if (new_pass.length < 10) {
+       setErrorMessage("Password length should be more than 10.");
+    } else {
+       setErrorMessage("Password is strong!"); 
+    }
+ }
+
   window.scrollTo(0, 0);
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
@@ -48,8 +73,10 @@ const Login = ({ location, history }) => {
             type="password"
             placeholder="Password"
             value={password}
-            onChange={(e) => setPassword(e.target.value)}
+            onChange={handlePassword}
+            // onChange={(e) => setPassword(e.target.value)}
           />
+          <div style = {{ color: "red" }}> {errorMessage} </div>
           <button type="submit">Login</button>
           <p>
             <Link
